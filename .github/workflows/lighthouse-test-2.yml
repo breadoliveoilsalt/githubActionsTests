@@ -1,0 +1,42 @@
+name: Lighthouse Basic Test
+on:
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    # runs-on: [self-hosted, runner-engineering]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Apt Update
+        run: sudo apt-get -y update
+
+      - name: Install Chrome Deps
+        run: sudo apt-get -y install libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libgbm1 libpangocairo-1.0-0 libgtk-3-0 libasound2
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.12.0'
+
+      - name: Install Chrome
+        id: install-chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Inpsect chrome
+        run: |
+          echo Installed chromium version: ${{ steps.install-chrome.outputs.chrome-version }}
+          echo ${{ steps.install-chrome.outputs.chrome-path }} --version
+
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v10
+        env:
+          CHROME_PATH: '${{ steps.install-chrome.outputs.chrome-path }}'
+        with:
+          urls: |
+            https://example.com/
+          budgetPath: ./budget.json # test performance budgets
+          uploadArtifacts: true # save results as an action artifacts
+          temporaryPublicStorage: true # upload lighthouse report to the temporary storage
+
