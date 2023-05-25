@@ -35,7 +35,7 @@ jobs:
 
       - name: Install Chrome
         id: install-chrome
-        uses: browser-actions/setup-chrome@v1
+        uses: browser-actions/setup-chrome@v1.2
 
       - name: Inpsect chrome
         run: |
@@ -43,9 +43,8 @@ jobs:
           echo ${{ steps.install-chrome.outputs.chrome-path }} --version
 
 
-      - name: Inspect inputs
+      - name: Inspect URLS to Test
         run: |
-          echo "env: ${{ inputs.env }}"
           echo "urls: ${{ inputs.urls }}"
 
       - name: Audit URLs using Lighthouse
@@ -56,5 +55,5 @@ jobs:
           urls: "${{ inputs.urls }}"
           budgetPath: ./budget.json # test performance budgets
           uploadArtifacts: true # save results as an action artifacts
-          temporaryPublicStorage: true # upload lighthouse report to the temporary storage
+          # temporaryPublicStorage: true # upload lighthouse report to the temporary storage
 

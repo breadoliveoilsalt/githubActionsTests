@@ -4,13 +4,13 @@ set -eo pipefail
 
 ENV=$1
 TOKEN=$2
+BRANCH="lighthouseTesting"
 DEV="dev"
 QA="qa"
 PROD="prod"
 ORIGIN=""
 URLS=""
 LOG_FILE="curl_log.tmp"
-BRANCH="lighthouseTesting"
 OK_STATUS_CODE_RESPONSE="204"
 
 function validate_args {
