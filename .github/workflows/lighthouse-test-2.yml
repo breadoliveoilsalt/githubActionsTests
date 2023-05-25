@@ -1,0 +1,56 @@
+name: Lighthouse Basic Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Domain for running Lighthouse tests'
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+      urls:
+        description: 'A string of urls to test, seprated by newline characters'
+        required: true
+        type: string
+  push:
+    branches:
+      - 'lighthouseTesting'
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Apt Update
+        run: sudo apt-get -y update
+
+      - name: Install Chrome Deps
+        run: sudo apt-get -y install libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libgbm1 libpangocairo-1.0-0 libgtk-3-0 libasound2
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.12.0'
+
+      - name: Install Chrome
+        id: install-chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Inspect URLS to Test
+        run: |
+          echo "urls: ${{ inputs.urls }}"
+
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v10
+        env:
+          CHROME_PATH: '${{ steps.install-chrome.outputs.chrome-path }}'
+        with:
+          urls: "${{ inputs.urls }}"
+          budgetPath: ./budget.json # test performance budgets
+          uploadArtifacts: true # save results as an action artifacts
+          # temporaryPublicStorage: true # upload lighthouse report to the temporary storage
+
