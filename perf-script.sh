@@ -4,6 +4,7 @@ set -eo pipefail
 
 ENV=$1
 TOKEN=$2
+ORIGIN=""
 URLS=""
 LOG_FILE="curl_log.tmp"
 BRANCH="lighthouseTesting"
@@ -16,8 +17,21 @@ function validate_args {
   fi
 }
 
+function set_origin {
+  case "$ENV" in
+    "dev") ORIGIN="http://www.owasp.org"
+      ;;
+    "qa") ORIGIN="https://owasp.org"
+      ;;
+    "prod") ORIGIN="https://www.owasp.org"
+      ;;
+    *) echo "Invalid environment"; exit 1;
+      ;;
+  esac
+}
+
 function generate_urls {
-  while read -r line; do URLS+="$line"'\n'; done < pathnames.txt
+  while read -r LINE; do URLS+=${ORIGIN}${LINE}'\n'; done < pathnames.txt
 }
 
 function data_to_send_to_github {
@@ -56,6 +70,7 @@ function check_trigger_succeded {
 }
 
 validate_args
+set_origin
 generate_urls
 trigger_github_action
 check_trigger_succeded
