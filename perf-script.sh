@@ -4,6 +4,9 @@ set -eo pipefail
 
 ENV=$1
 TOKEN=$2
+DEV="dev"
+QA="qa"
+PROD="prod"
 ORIGIN=""
 URLS=""
 LOG_FILE="curl_log.tmp"
@@ -11,7 +14,7 @@ BRANCH="lighthouseTesting"
 OK_STATUS_CODE_RESPONSE="204"
 
 function validate_args {
-  if [[ ("$ENV" != "dev") && ("$ENV" != "qa") && ("$ENV" != "prod") ]]; then
+  if [[ ("$ENV" != "$DEV") && ("$ENV" != "$QA") && ("$ENV" != "$PROD") ]]; then
     echo 'ERROR: Must provide an argument for the environment: "dev", "qa", or "prod"'
     exit 1
   fi
@@ -19,11 +22,11 @@ function validate_args {
 
 function set_origin {
   case "$ENV" in
-    "dev") ORIGIN="http://www.owasp.org"
+    "$DEV") ORIGIN="http://www.owasp.org"
       ;;
-    "qa") ORIGIN="https://owasp.org"
+    "$QA") ORIGIN="https://owasp.org"
       ;;
-    "prod") ORIGIN="https://www.owasp.org"
+    "$PROD") ORIGIN="https://www.owasp.org"
       ;;
     *) echo "Invalid environment"; exit 1;
       ;;
