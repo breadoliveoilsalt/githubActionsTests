@@ -29,13 +29,16 @@ jobs:
           echo Installed chromium version: ${{ steps.install-chrome.outputs.chrome-version }}
           echo ${{ steps.install-chrome.outputs.chrome-path }} --version
 
+        # worked:
+        # https://example.com/
+
       - name: Audit URLs using Lighthouse
         uses: treosh/lighthouse-ci-action@v10
         env:
           CHROME_PATH: '${{ steps.install-chrome.outputs.chrome-path }}'
         with:
           urls: |
-            https://example.com/
+            https://www.breadoliveoilsalt.com
           budgetPath: ./budget.json # test performance budgets
           uploadArtifacts: true # save results as an action artifacts
           temporaryPublicStorage: true # upload lighthouse report to the temporary storage
