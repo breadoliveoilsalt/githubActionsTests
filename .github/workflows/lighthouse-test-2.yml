@@ -35,13 +35,7 @@ jobs:
 
       - name: Install Chrome
         id: install-chrome
-        uses: browser-actions/setup-chrome@v1.2
-
-      - name: Inpsect chrome
-        run: |
-          echo Installed chromium version: ${{ steps.install-chrome.outputs.chrome-version }}
-          echo ${{ steps.install-chrome.outputs.chrome-path }} --version
-
+        uses: browser-actions/setup-chrome@v1
 
       - name: Inspect URLS to Test
         run: |
