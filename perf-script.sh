@@ -2,25 +2,37 @@
 
 # set -Eeou pipefail
 
-if [[ ("$1" != "dev") && ("$1" != "qa") && ("$1" != "prod") ]]; then
+ENV=$1
+TOKEN=$2
+URLS=""
+
+if [[ ("$ENV" != "dev") && ("$ENV" != "qa") && ("$ENV" != "prod") ]]; then
   echo 'ERROR: Must provide an argument for the environment: "dev", "qa", or "prod"'
   exit 1
 fi
 
-ENV=$1
+function generate_urls {
+  while read -r line; do URLS+="$line"'\n'; done < pathnames.txt
+}
+
+generate_urls
+echo "URLS"
+echo "$URLS"
 
 # "urls": "https://www.breadoliveoilsalt.com/\nhttps://www.example.com/\n"
-data_to_send_to_github() {
+function data_to_send_to_github {
   cat << EOF
 {
   "ref": "lighthouseTesting",
   "inputs": {
     "env": "$ENV",
-    "urls": "https://www.breadoliveoilsalt.com\nhttps://example.com\n"
+    "urls": "$URLS"
   }
 }
 EOF
 }
+
+echo "data: $(data_to_send_to_github)"
 
 LOG_FILE="curl_log.tmp"
 
@@ -28,7 +40,7 @@ LOG_FILE="curl_log.tmp"
 curl -iLSs \
   -X POST \
   -H "Accept: application/vnd.github+json" \
-  -H "Authorization: Bearer $2" \
+  -H "Authorization: Bearer $TOKEN" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
   "https://api.github.com/repos/breadoliveoilsalt/githubActionsTests/actions/workflows/lighthouse-test-2.yml/dispatches" \
   -d "$(data_to_send_to_github)" \
