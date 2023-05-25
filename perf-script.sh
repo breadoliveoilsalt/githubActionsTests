@@ -4,7 +4,7 @@ set -eo pipefail
 
 ENV=$1
 TOKEN=$2
-BRANCH="lighthouseTesting"
+BRANCH="main"
 DEV="dev"
 QA="qa"
 PROD="prod"
