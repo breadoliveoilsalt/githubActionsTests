@@ -16,20 +16,11 @@ data_to_send_to_github() {
   "ref": "lighthouseTesting",
   "inputs": {
     "env": "$ENV",
-    "urls": "https://www.breadoliveoilsalt.com"
+    "urls": "https://www.breadoliveoilsalt.com\nhttps://example.com\n"
   }
 }
 EOF
 }
-
-
-# data_to_send_to_github() {
-#   cat << EOF
-# {
-#   "ref": "lighthouseTesting"
-# }
-# EOF
-# }
 
 LOG_FILE="curl_log.tmp"
 
