@@ -53,7 +53,7 @@ jobs:
         env:
           CHROME_PATH: '${{ steps.install-chrome.outputs.chrome-path }}'
         with:
-          urls: "{{ inputs.urls }}"
+          urls: "${{ inputs.urls }}"
           budgetPath: ./budget.json # test performance budgets
           uploadArtifacts: true # save results as an action artifacts
           temporaryPublicStorage: true # upload lighthouse report to the temporary storage
