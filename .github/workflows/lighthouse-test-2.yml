@@ -1,10 +1,23 @@
 name: Lighthouse Basic Test
+
 on:
   workflow_dispatch:
+    inputs:
+      env:
+        description: 'Domain for running Lighthouse tests'
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+      urls:
+        description: 'A string of urls to test, seprated by newline characters'
+        required: true
+        type: string
 
 jobs:
   lighthouse:
-    # runs-on: [self-hosted, runner-engineering]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,15 +42,18 @@ jobs:
           echo Installed chromium version: ${{ steps.install-chrome.outputs.chrome-version }}
           echo ${{ steps.install-chrome.outputs.chrome-path }} --version
 
-        # worked:
-        # https://example.com/
+
+      - name: Inspect inputs
+        run: |
+          echo "env: ${{ inputs.env }}"
+          echo "urls: ${{ inputs.urls }}"
 
       - name: Audit URLs using Lighthouse
         uses: treosh/lighthouse-ci-action@v10
         env:
           CHROME_PATH: '${{ steps.install-chrome.outputs.chrome-path }}'
         with:
-          urls: "https://www.breadoliveoilsalt.com\nhttps://www.example.com\n"
+          urls: "{{ inputs.urls }}"
           budgetPath: ./budget.json # test performance budgets
           uploadArtifacts: true # save results as an action artifacts
           temporaryPublicStorage: true # upload lighthouse report to the temporary storage
