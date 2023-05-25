@@ -55,7 +55,7 @@ function trigger_github_action {
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $TOKEN" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
-    "https://api.github.com/repos/breadoliveoilsalt/githubActionsTests/actions/workflows/lighthouse-test-2.yml/dispatches" \
+    "https://api.github.com/repos/breadoliveoilsalt/githubActionsTests/actions/workflows/lighthouse-test.yml/dispatches" \
     -d "$(data_to_send_to_github)" \
     | tee "$LOG_FILE"
 }
