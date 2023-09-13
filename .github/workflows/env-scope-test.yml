@@ -1,0 +1,19 @@
+name: ENV Scope Test
+
+on:
+  push:
+    branches:
+      - testingEnvScope
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+      - uses: actions/checkout@v3
+
+      - name: Checkout Repo
+        env: : $NODE_ENV
+          NODE_ENV: development
+        run: bash ./envScopeTest.sh
+
