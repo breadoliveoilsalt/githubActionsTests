@@ -9,11 +9,12 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
+
       - name: Checkout Repo
       - uses: actions/checkout@v3
 
-      - name: Checkout Repo
-        env: : $NODE_ENV
+      - name: Run Script
+        env:
           NODE_ENV: development
         run: bash ./envScopeTest.sh
 
